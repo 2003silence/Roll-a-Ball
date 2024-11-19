@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour {
@@ -46,6 +47,7 @@ public class PlayerControl : MonoBehaviour {
         if (count == 6)
         {
             winText.text = "You Win!";
+            SceneManager.LoadScene(2);
         }
 
     }
