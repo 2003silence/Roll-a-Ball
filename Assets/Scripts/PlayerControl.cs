@@ -1,8 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -19,19 +16,14 @@ public class PlayerControl : MonoBehaviour
     public LayerMask groundLayer;
     public bool isGround;
 
-    public Text countText;
-    public Text winText;
-
-    private int count;
-
     private Vector3 airMoveDir; // 用于存储空中移动方向
+
+    private GameManager gameManager; // 引用 GameManager 脚本
 
     private void Start()
     {
         cc = GetComponent<CharacterController>();
-        count = 0;
-        SetCountText();
-        winText.text = "";
+        gameManager = FindObjectOfType<GameManager>(); // 获取 GameManager 实例
     }
 
     private void FixedUpdate()
@@ -84,20 +76,9 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Pick Up"))
         {
-            other.gameObject.SetActive(false);
-            count++;
-            SetCountText();
-        }
-    }
-
-    // 设置计数器文本
-    void SetCountText()
-    {
-        countText.text = "count " + count.ToString();
-        if (count == 6)
-        {
-            winText.text = "You Win!";
-            SceneManager.LoadScene(2);
+            other.gameObject.SetActive(false); // 禁用被拾取的物体
+            gameManager.AddScore(); // 通知 GameManager 增加分数
+            gameManager.RemoveTrash(); // 减少垃圾计数
         }
     }
 }

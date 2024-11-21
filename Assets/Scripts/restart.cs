@@ -12,6 +12,7 @@ public class restart : MonoBehaviour
     }
     public void endOnButtonClicked()
     {
+        SceneManager.LoadScene(0);
         Application.Quit();
     }
 }

@@ -115,5 +115,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   changeDirectionTime: 2
-  beanSpawnInterval: 5
   beanPrefab: {fileID: 1134231397639794, guid: e68fea2f58aaf9e498061ee383384d1e, type: 3}
+  maxTrashCount: 3
