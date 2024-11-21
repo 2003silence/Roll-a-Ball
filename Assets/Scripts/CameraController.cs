@@ -4,18 +4,27 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    public GameObject player;
-
+    public Transform player;
+    private float mouseX, mouseY;
+    public float mouseSensitivity;
     private Vector3 offset;
+    public float xRotation;
 
 	// Use this for initialization
 	void Start () {
-        offset = transform.position - player.transform.position;
+        //offset = transform.position - player.transform.position;
 	}
 
-    // LateUpdate 在所有Update（）动作完成之后才执行，
-    //因此将镜头移动放在此，确保镜头移动时，物体本帧确实已经发生了移动。
-	void LateUpdate () {
-        transform.position = player.transform.position + offset;
+	void Update () {
+        //transform.position = player.transform.position + offset;
+        mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+        mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+
+        xRotation -= mouseY;  // 防止鼠标不动时Y轴自动回弹到0
+        xRotation = Mathf.Clamp(xRotation, -70f, 70f);  // 防止Y轴视角转动角度过大
+
+        player.Rotate(Vector3.up * mouseX);
+        transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+
 	}
 }
