@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2293672888612969280}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -114,6 +114,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  changeDirectionTime: 2
-  beanSpawnInterval: 5
+  escapeSpeedMultiplier: 3
+  changeDirectionTime: 3
   beanPrefab: {fileID: 1134231397639794, guid: e68fea2f58aaf9e498061ee383384d1e, type: 3}
+  stoppedColor: {r: 0, g: 1, b: 0, a: 1}
+  maxTrashCount: 3
