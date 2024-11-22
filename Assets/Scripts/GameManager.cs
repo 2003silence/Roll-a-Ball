@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
 
     private int count;       // 玩家分数
     private int trashCount;  // 场上垃圾数量
+    public Spawner spawner;  // 实例化物体生成器
     public int timeLimit = 60;  // 游戏总时间（秒）
 
     private bool isGameOver = false; // 标志游戏是否结束
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         count = 0; // 初始化分数
-        trashCount = 6; // 初始化垃圾数量为6个
+        trashCount = spawner.initialPickupCount; // 初始化垃圾数量
         SetCountText();
         SetTrashCountText();
         winText.text = ""; // 初始化胜利文本
