@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -16,14 +17,25 @@ public class PlayerControl : MonoBehaviour
     public LayerMask groundLayer;
     public bool isGround;
 
-    private Vector3 airMoveDir; // 用于存储空中移动方向
+    public float interactRange = 3f; // 交互范围
+    public Text feedbackText; // 用于显示提示文字的 UI 元素
 
+    private Vector3 airMoveDir; // 用于存储空中移动方向
     private GameManager gameManager; // 引用 GameManager 脚本
 
     private void Start()
     {
         cc = GetComponent<CharacterController>();
         gameManager = FindObjectOfType<GameManager>(); // 获取 GameManager 实例
+        if (feedbackText != null)
+        {
+            feedbackText.text = ""; // 初始化提示文字为空
+            feedbackText.color = new Color(feedbackText.color.r, feedbackText.color.g, feedbackText.color.b, 0); // 设置透明
+        }
+
+        // 锁定鼠标到窗口内并显示，需要先在窗口内点击一下进行锁定
+        Cursor.lockState = CursorLockMode.Confined; // 锁定鼠标到游戏窗口内
+        Cursor.visible = true; // 显示鼠标
     }
 
     private void FixedUpdate()
@@ -69,6 +81,78 @@ public class PlayerControl : MonoBehaviour
         // 自由落体
         velocity.y -= gravity * Time.deltaTime;
         cc.Move(velocity * Time.deltaTime);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F)) // 检测键盘 F 键按下
+        {
+            TryInteractWithEnemy();
+        }
+    }
+
+    void TryInteractWithEnemy()
+    {
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, interactRange);
+        bool hasInteracted = false; // 标记是否与至少一个敌人交互
+
+        foreach (var hitCollider in hitColliders) // 遍历制止范围内的所有敌人 
+        {
+            RandomMovement enemy = hitCollider.GetComponent<RandomMovement>();
+            if (enemy != null && !enemy.IsStopped()) // 如果是未制止的敌人
+            {
+                enemy.StopThrowingTrash(); // 制止丢垃圾（触发逃离逻辑）
+                hasInteracted = true; // 至少制止了一个敌人
+            }
+        }
+
+        // 如果有交互，显示提示文字
+        if (hasInteracted)
+        {
+            ShowFeedback("制止成功！");
+        }
+    }
+
+    // 显示提示文字的方法
+    void ShowFeedback(string message)
+    {
+        if (feedbackText != null)
+        {
+            feedbackText.text = message;
+            StartCoroutine(FadeInAndOut(feedbackText));
+        }
+    }
+
+    // 淡入淡出效果的协程
+    IEnumerator FadeInAndOut(Text text)
+    {
+        float fadeInTime = 0.5f; // 淡入时间
+        float fadeOutTime = 0.5f; // 淡出时间
+        float displayTime = 1.0f; // 停留时间
+
+        // 淡入
+        for (float t = 0; t < fadeInTime; t += Time.deltaTime)
+        {
+            float alpha = t / fadeInTime;
+            text.color = new Color(text.color.r, text.color.g, text.color.b, alpha);
+            yield return null;
+        }
+
+        text.color = new Color(text.color.r, text.color.g, text.color.b, 1); // 确保完全显示
+
+        // 停留
+        yield return new WaitForSeconds(displayTime);
+
+        // 淡出
+        for (float t = 0; t < fadeOutTime; t += Time.deltaTime)
+        {
+            float alpha = 1 - (t / fadeOutTime);
+            text.color = new Color(text.color.r, text.color.g, text.color.b, alpha);
+            yield return null;
+        }
+
+        text.color = new Color(text.color.r, text.color.g, text.color.b, 0); // 确保完全隐藏
+        text.text = ""; // 清空文字内容
     }
 
     // 捡起物体
