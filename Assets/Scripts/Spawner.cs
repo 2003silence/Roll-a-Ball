@@ -27,9 +27,6 @@ public class Spawner : MonoBehaviour
                 1f,
                 Random.Range(boundaryZ.x, boundaryZ.y)
             );
-
-            // 自动添加随机移动逻辑
-            enemy.AddComponent<RandomMovement>();
         }
     }
 

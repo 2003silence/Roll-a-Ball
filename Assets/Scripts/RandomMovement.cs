@@ -8,7 +8,12 @@ public class RandomMovement : MonoBehaviour
     public float changeDirectionTime = 3f; // 每隔多久改变一次方向
     public GameObject beanPrefab; // 豆子预制件
     public Color stoppedColor = Color.green; // 制止后的颜色
-
+    public float gravity;
+    public Transform groundCheck;
+    public float checkRadius;
+    public LayerMask groundLayer;
+    public bool isGround;
+    private Vector3 velocity;
     private Vector3 randomDirection; // 随机方向
     private float timer; // 改变方向计时器
     private CharacterController cc;
@@ -34,12 +39,20 @@ public class RandomMovement : MonoBehaviour
         ChangeDirection(); // 初始化随机方向
 
         // 随机初始化丢垃圾的时间间隔
-        nextSpawnTime = Random.Range(5f, 15f); // 初始丢垃圾间隔随机 5-15 秒
+        nextSpawnTime = Random.Range(5f, 20f); // 初始丢垃圾间隔随机 5-20 秒
         StartCoroutine(SpawnBeanCoroutine());
     }
 
     void Update()
     {
+         // 判断是否着地
+        isGround = Physics.CheckSphere(groundCheck.position, checkRadius, groundLayer);
+        // 确保垂直速度归零
+        if (isGround && velocity.y < 0)
+        {
+            velocity.y = -3f;
+        }
+
         if (isStopped && !isEscaping) return; // 如果已被制止且不在逃离状态，停止所有动作
 
         if (isEscaping)
@@ -67,6 +80,10 @@ public class RandomMovement : MonoBehaviour
                 ChangeDirection(); // 定期改变方向
             }
         }
+        
+        // 自由落体
+        velocity.y -= gravity * Time.deltaTime;
+        cc.Move(velocity * Time.deltaTime);
     }
 
     void ChangeDirection()
@@ -94,13 +111,15 @@ public class RandomMovement : MonoBehaviour
             // 在当前敌人位置生成豆子
             if (beanPrefab != null)
             {
-                Instantiate(beanPrefab, new Vector3(transform.position.x, 0.5f, transform.position.z), Quaternion.identity);
+                float randomRotationY = Random.Range(0f, 360f);
+                float randomRotationZ = Random.Range(0f, 360f);
+                Instantiate(beanPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(90, randomRotationY, randomRotationZ));
                 gameManager.AddTrash(); // 增加全局垃圾计数
                 trashCount++; // 增加当前敌人生成的垃圾数量
             }
 
             // 随机生成下一次丢垃圾的时间间隔
-            nextSpawnTime = Random.Range(5f, 15f);
+            nextSpawnTime = Random.Range(5f, 20f);
         }
     }
 
