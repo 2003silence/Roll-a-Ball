@@ -7,7 +7,6 @@ public class RandomMovement : MonoBehaviour
     public float escapeSpeedMultiplier = 3f; // 逃离时的速度倍数
     public float changeDirectionTime = 3f; // 每隔多久改变一次方向
     public GameObject beanPrefab; // 豆子预制件
-    public Color stoppedColor = Color.green; // 制止后的颜色
     public float gravity;
     public Transform groundCheck;
     public float checkRadius;
@@ -29,14 +28,16 @@ public class RandomMovement : MonoBehaviour
     private float escapeTime; // 逃离持续时间
     private float escapeTimer = 0f; // 当前逃离时间计时
 
-    private Renderer renderer; // 用于改变颜色
+    private Renderer renderer; // 渲染器
+    public GameObject hatPrefab; // 帽子的预制件
+    private GameObject hatInstance; // 实例化后的帽子对象
 
     void Start()
     {
         cc = GetComponent<CharacterController>(); // 获取 CharacterController
         am = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManager>(); // 获取 GameManager 实例
-        renderer = GetComponent<Renderer>(); // 获取材质渲染器
+        renderer = GetComponent<Renderer>(); // 获取渲染器
 
         ChangeDirection(); // 初始化随机方向
 
@@ -83,6 +84,9 @@ public class RandomMovement : MonoBehaviour
                 ChangeDirection(); // 定期改变方向
             }
         }
+
+        // 面朝移动方向
+        transform.rotation = Quaternion.LookRotation(randomDirection);
         
         // 自由落体
         velocity.y -= gravity * Time.deltaTime;
@@ -152,16 +156,15 @@ public class RandomMovement : MonoBehaviour
         {
             Vector3 toPlayer = (player.transform.position - transform.position).normalized;
             randomDirection = -toPlayer; // 设置为反方向
+
+            // 标记敌人，戴上绿色的帽子表示学会了绿色环保
+            hatInstance = Instantiate(hatPrefab, transform); // 实例化帽子并设置为敌人的子对象
+            hatInstance.transform.localPosition = new Vector3(0, 0.984f, -0.021f); // 根据需要调整帽子位置
+            hatInstance.transform.localRotation = Quaternion.identity; // 设置默认旋转，保证帽子正确放置
         }
         else
         {
             randomDirection = new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f)).normalized; // 备用随机方向
-        }
-
-        // 改变颜色
-        if (renderer != null)
-        {
-            renderer.material.color = stoppedColor;
         }
     }
 

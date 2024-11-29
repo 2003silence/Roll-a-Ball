@@ -191,7 +191,6 @@ MonoBehaviour:
   escapeSpeedMultiplier: 3
   changeDirectionTime: 3
   beanPrefab: {fileID: 1134231397639794, guid: e68fea2f58aaf9e498061ee383384d1e, type: 3}
-  stoppedColor: {r: 0.21960786, g: 0.21960786, b: 0.21960786, a: 1}
   gravity: 10
   groundCheck: {fileID: 57263557}
   checkRadius: 0.3
@@ -200,6 +199,8 @@ MonoBehaviour:
     m_Bits: 64
   isGround: 0
   maxTrashCount: 3
+  hatPrefab: {fileID: 1624012804735188297, guid: 84a90282a4e2f9b4c9ccecce9646dfbb,
+    type: 3}
 --- !u!1001 &2972002925786923671
 PrefabInstance:
   m_ObjectHideFlags: 0
