@@ -8,11 +8,11 @@ public class restart : MonoBehaviour
     // Start is called before the first frame update
     public void restartOnButtonClicked()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Playground");
     }
     public void endOnButtonClicked()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene("startgame");
         Application.Quit();
     }
 }
