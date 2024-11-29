@@ -59,8 +59,11 @@ public class PlayerControl : MonoBehaviour
         // 检测是否按下 Shift 键，按下时二倍速
         if (Input.GetKey(KeyCode.LeftShift))
         {
+            am.SetBool("isrun", true);  // 跑步动作
             currentSpeed *= 2;
         }
+        else am.SetBool("isrun", false);
+
         if (isGround)
         {
             // 在地上时允许输入移动
@@ -84,8 +87,12 @@ public class PlayerControl : MonoBehaviour
         velocity.y -= gravity * Time.deltaTime;
         cc.Move(velocity * Time.deltaTime);
 
+        // 走路动作
         if(dir != Vector3.zero) am.SetBool("iswalk", true);
         else am.SetBool("iswalk", false);
+        // 跳跃动作
+        if(isGround) am.SetBool("isground", true);
+        else am.SetBool("isground", false);
     }
 
     private void Update()
