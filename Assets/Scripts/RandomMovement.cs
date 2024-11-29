@@ -17,6 +17,7 @@ public class RandomMovement : MonoBehaviour
     private Vector3 randomDirection; // 随机方向
     private float timer; // 改变方向计时器
     private CharacterController cc;
+    private Animator am;
 
     private GameManager gameManager; // 引用 GameManager
     private float nextSpawnTime; // 下一次丢垃圾的时间间隔
@@ -33,6 +34,7 @@ public class RandomMovement : MonoBehaviour
     void Start()
     {
         cc = GetComponent<CharacterController>(); // 获取 CharacterController
+        am = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManager>(); // 获取 GameManager 实例
         renderer = GetComponent<Renderer>(); // 获取材质渲染器
 
@@ -55,6 +57,8 @@ public class RandomMovement : MonoBehaviour
 
         if (isEscaping)
         {
+            // 逃离动作
+            am.SetBool("isrun", true);
             // 逃离逻辑
             cc.Move(randomDirection * moveSpeed * escapeSpeedMultiplier * Time.deltaTime);
             escapeTimer += Time.deltaTime;
@@ -68,6 +72,7 @@ public class RandomMovement : MonoBehaviour
         }
         else
         {
+            am.SetBool("isrun", false);
             // 正常移动逻辑
             cc.Move(randomDirection * moveSpeed * Time.deltaTime);
 
@@ -82,6 +87,13 @@ public class RandomMovement : MonoBehaviour
         // 自由落体
         velocity.y -= gravity * Time.deltaTime;
         cc.Move(velocity * Time.deltaTime);
+        
+        // 走路动作
+        am.SetBool("iswalk", true);
+
+        // 跳跃动作
+        if(isGround) am.SetBool("isground", true);
+        else am.SetBool("isground", false);
     }
 
     void ChangeDirection()
@@ -113,9 +125,10 @@ public class RandomMovement : MonoBehaviour
             // 在当前敌人位置生成豆子
             if (beanPrefab != null)
             {
+                am.SetTrigger("pickup");  // 乱丢垃圾动作 
                 float randomRotationY = Random.Range(0f, 360f);
                 float randomRotationZ = Random.Range(0f, 360f);
-                Instantiate(beanPrefab, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(90, randomRotationY, randomRotationZ));
+                Instantiate(beanPrefab, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.Euler(90, randomRotationY, randomRotationZ));
                 gameManager.AddTrash(); // 增加全局垃圾计数
                 trashCount++; // 增加当前敌人生成的垃圾数量
             }

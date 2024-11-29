@@ -121,6 +121,7 @@ public class PlayerControl : MonoBehaviour
         // 如果有交互，显示提示文字
         if (hasInteracted)
         {
+            am.SetTrigger("interact");
             ShowFeedback("制止成功！");
         }
     }
@@ -172,6 +173,7 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Pick Up"))
         {
+            am.SetTrigger("pickup");
             other.gameObject.SetActive(false); // 禁用被拾取的物体
             gameManager.AddScore(); // 通知 GameManager 增加分数
             gameManager.RemoveTrash(); // 减少垃圾计数

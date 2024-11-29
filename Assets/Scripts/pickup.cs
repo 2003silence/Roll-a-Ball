@@ -10,7 +10,7 @@ public class pickup : MonoBehaviour
 
     void Update()
     {
-        if(total <= 0.95){
+        if(total <= 1.0f){
             // 自由落体
             velocity.z += gravity * Time.deltaTime;
             // 累加位移总距离

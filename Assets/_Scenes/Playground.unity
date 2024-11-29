@@ -5157,7 +5157,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 45115608}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.805, z: 0.121}
+  m_LocalPosition: {x: 0, y: 0.747, z: 0.143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 500616721}
@@ -6092,7 +6092,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b41c561aa980f254fac36881d1582384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6782461351229189269, guid: 0a23c9f6a19c8a74da3a71d551b8272b,
+  enemyPrefab: {fileID: 1416310045743033700, guid: a17ad04f3dfc97d4ab93354d70e5dbde,
     type: 3}
   initialEnemyCount: 6
   boundaryX: {x: -18, y: 18}
