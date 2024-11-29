@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
 
         winText.text = "闯关成功!";
-        StartCoroutine(LoadNextScene());
+        StartCoroutine(finishgame());
     }
 
     // 游戏失败逻辑
@@ -80,14 +80,15 @@ public class GameManager : MonoBehaviour
         isGameOver = true;
 
         winText.text = "闯关失败!";
-        StartCoroutine(LoadNextScene());
+        StartCoroutine(finishgame());
     }
 
-    // 加载下一场景
-    private IEnumerator LoadNextScene()
+    // 暂停两秒并展示结果的协程函数
+    IEnumerator finishgame()
     {
-        yield return new WaitForSeconds(2); // 等待2秒
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1); // 加载下一场景
+        // 等待 2 秒
+        yield return new WaitForSeconds(2f);
+        SceneManager.LoadScene("endgame");
     }
 
     // 倒计时逻辑
