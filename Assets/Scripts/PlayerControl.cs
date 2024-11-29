@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class PlayerControl : MonoBehaviour
 {
     private CharacterController cc;
+    private Animator am;
     public float movespeed;
     public float jumpspeed;
     private Vector3 dir;
@@ -26,6 +27,7 @@ public class PlayerControl : MonoBehaviour
     private void Start()
     {
         cc = GetComponent<CharacterController>();
+        am = GetComponent<Animator>();
         gameManager = FindObjectOfType<GameManager>(); // 获取 GameManager 实例
         if (feedbackText != null)
         {
@@ -81,6 +83,9 @@ public class PlayerControl : MonoBehaviour
         // 自由落体
         velocity.y -= gravity * Time.deltaTime;
         cc.Move(velocity * Time.deltaTime);
+
+        if(dir != Vector3.zero) am.SetBool("iswalk", true);
+        else am.SetBool("iswalk", false);
     }
 
     private void Update()

@@ -8,9 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/startgame.unity
     guid: 9d525b57c1896e740abf6db08710ed25
-  - enabled: 1
-    path: Assets/_Scenes/MiniGame.unity
-    guid: 5b865f6d78e87b942b745028c19b1719
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/_Scenes/endgame.unity
     guid: 98acf687ac9426946aea5517bd436067
