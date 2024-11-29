@@ -39,7 +39,7 @@ public class RandomMovement : MonoBehaviour
         ChangeDirection(); // 初始化随机方向
 
         // 随机初始化丢垃圾的时间间隔
-        nextSpawnTime = Random.Range(5f, 20f); // 初始丢垃圾间隔随机 5-20 秒
+        nextSpawnTime = Random.Range(10f, 20f); // 初始丢垃圾间隔随机 10-20 秒
         StartCoroutine(SpawnBeanCoroutine());
     }
 
@@ -52,8 +52,6 @@ public class RandomMovement : MonoBehaviour
         {
             velocity.y = -3f;
         }
-
-        if (isStopped && !isEscaping) return; // 如果已被制止且不在逃离状态，停止所有动作
 
         if (isEscaping)
         {
@@ -102,11 +100,15 @@ public class RandomMovement : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnBeanCoroutine()
+    IEnumerator SpawnBeanCoroutine()  // 协程函数
     {
         while (trashCount < maxTrashCount && !isStopped) // 仅在垃圾数量未达上限且未被制止时继续生成垃圾
         {
-            yield return new WaitForSeconds(nextSpawnTime); // 等待下一次丢垃圾的时间间隔
+            // 等待下一次丢垃圾的时间间隔
+            yield return new WaitForSeconds(nextSpawnTime); 
+
+            // 防止等待期间被制止，却多生成一次垃圾
+            if (isStopped) break;
 
             // 在当前敌人位置生成豆子
             if (beanPrefab != null)
@@ -119,7 +121,7 @@ public class RandomMovement : MonoBehaviour
             }
 
             // 随机生成下一次丢垃圾的时间间隔
-            nextSpawnTime = Random.Range(5f, 20f);
+            nextSpawnTime = Random.Range(10f, 20f);
         }
     }
 
