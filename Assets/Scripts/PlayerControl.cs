@@ -37,7 +37,7 @@ public class PlayerControl : MonoBehaviour
 
         // 锁定鼠标到窗口内并显示，需要先在窗口内点击一下进行锁定
         Cursor.lockState = CursorLockMode.Confined; // 锁定鼠标到游戏窗口内
-        Cursor.visible = true; // 显示鼠标
+        Cursor.visible = false; // 显示鼠标
     }
 
     private void FixedUpdate()

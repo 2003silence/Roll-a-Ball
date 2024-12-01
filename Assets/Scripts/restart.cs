@@ -5,7 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class restart : MonoBehaviour
 {
-    // Start is called before the first frame update
+    void Start()
+    {
+        Cursor.visible = true; // 显示鼠标
+    }
     public void restartOnButtonClicked()
     {
         SceneManager.LoadScene("Playground");

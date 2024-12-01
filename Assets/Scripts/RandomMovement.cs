@@ -6,7 +6,7 @@ public class RandomMovement : MonoBehaviour
     public float moveSpeed = 3f; // 默认移动速度
     public float escapeSpeedMultiplier = 3f; // 逃离时的速度倍数
     public float changeDirectionTime = 3f; // 每隔多久改变一次方向
-    public GameObject beanPrefab; // 豆子预制件
+    public GameObject[] pickupPrefabs;   // 用一个数组来存储所有的pickup预制体
     public float gravity;
     public Transform groundCheck;
     public float checkRadius;
@@ -31,6 +31,7 @@ public class RandomMovement : MonoBehaviour
     private Renderer renderer; // 渲染器
     public GameObject hatPrefab; // 帽子的预制件
     private GameObject hatInstance; // 实例化后的帽子对象
+    private GameObject beanPrefab;  // 选择后的模型
 
     void Start()
     {
@@ -44,6 +45,9 @@ public class RandomMovement : MonoBehaviour
         // 随机初始化丢垃圾的时间间隔
         nextSpawnTime = Random.Range(10f, 20f); // 初始丢垃圾间隔随机 10-20 秒
         StartCoroutine(SpawnBeanCoroutine());
+        // 随机选取一个垃圾模型
+        int randomIndex = Random.Range(0, pickupPrefabs.Length);  // 生成一个0到pickupPrefabs.Length之间的随机数
+        beanPrefab = pickupPrefabs[randomIndex];   // 获取随机选中的预制体
     }
 
     void Update()
@@ -127,12 +131,10 @@ public class RandomMovement : MonoBehaviour
             if (isStopped) break;
 
             // 在当前敌人位置生成豆子
-            if (beanPrefab != null)
+            if (beanPrefab != null && isGround)
             {
                 am.SetTrigger("pickup");  // 乱丢垃圾动作 
-                float randomRotationY = Random.Range(0f, 360f);
-                float randomRotationZ = Random.Range(0f, 360f);
-                Instantiate(beanPrefab, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.Euler(90, randomRotationY, randomRotationZ));
+                Instantiate(beanPrefab, new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z), Quaternion.Euler(0, 0, 0));
                 gameManager.AddTrash(); // 增加全局垃圾计数
                 trashCount++; // 增加当前敌人生成的垃圾数量
             }
